@@ -1,0 +1,23 @@
+{
+  "name": "projectmanager",
+  "version": "1.0.0",
+  "description": "helps to managing projects.",
+  "main": "./index.js",
+  "scripts": {
+    "test": "npm install -g && projectManager",
+    "testlocal": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.2.0",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.0",
+    "@types/shelljs": "^0.8.11"
+  },
+  "bin": {
+    "projectManager": "./index.js"
+  }
+}

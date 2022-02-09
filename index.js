@@ -11,6 +11,17 @@ const shell = require('shelljs');
 
 console.log("프로젝트 매니저입니다.");
 
+if(first()) {
+    console.log("초기화 진행중...");
+    os.mkdirSync(PROJECTDIR);
+    console.log("완료!");
+}
+
+function first() {
+    const dirs = fs.readdirSync(HOMEDIR);
+    return !dirs.includes('.projects');
+}
+
 loop();
 
 async function loop() {

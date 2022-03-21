@@ -5,13 +5,15 @@
   "main": "./index.js",
   "scripts": {
     "test": "npm install -g && projectManager",
-    "testlocal": "node index.js"
+    "testlocal": "node index.js",
+    "testrun": "tsc -b && node index2.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "inquirer": "^8.2.0",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "typescript-ioc": "^3.2.2"
   },
   "devDependencies": {
     "@types/inquirer": "^8.2.0",

@@ -1,48 +1,53 @@
-import JobApplicationService from "./src/Job/JobApplicationService";
-import MenuApplicationService from "./src/Menu/MenuApplicationService";
-import MenuSelectService from "./src/Menu/MenuSelectService";
+import { InitialService } from "./src/Service/InitialService";
 
-import { Menu, MenuComponent } from "./src/Menu/Menu";
+const initService = new InitialService();
 
-interface IProjectRepository {
-    check(): boolean;
-    init();
-    
+if(initService.first()) {
+    initService.init();
 }
 
-class InitialService {
-    projectRepository: IProjectRepository;
-    constructor(projectRepository: IProjectRepository) {
-        this.projectRepository = projectRepository;
+import { SelectService } from "./src/Service/SelectService";
+import { ProjectService } from "./src/Service/ProjectService";
+import { MenuService } from "./src/Service/MenuService";
+import { CodeService } from "./src/Service/CodeService";
+
+const menuService = new MenuService();
+const projectService = new ProjectService();
+const selectService = new SelectService();
+const codeService = new CodeService();
+// const jobService = new JobService();
+
+let mainMenu = menuService.buildMainMenu();
+let projectMenu = menuService.buildProjectMenu(projectService.loadProjects());
+// menuService.buildMenu(menuService.convertProjectToComponent(projects));
+
+mainloop();
+
+async function mainloop() {
+    while(true) {
+        await selectService.select("원하는 작업을 선택해주세요.", mainMenu) // mainMenu.getQuestionString();
+        .then(async ({selected}) => {
+            switch(selected) {
+                case "Select":
+                    await selectService.select("프로젝트를 선택해주세요.", projectMenu)
+                    .then(project => {
+                        codeService.openProject(project);
+                    })
+                    break;
+                
+                // case "New":
+                //     await inputService.getString("프로젝트 이름을 입력해주세요.")
+                //     .then(projectName => {
+                //         projectService.buildProject(projectName);
+                //     })
+                //     break;
+
+                case "Exit":
+                        process.exit(0);
+            
+                default:
+                    throw new Error(`There's any cases! INPUT:${selected}`);
+            }
+        })
     }
-
-    first(): boolean {
-        return this.projectRepository.check();
-    }
-
-    init(): void {
-        this.projectRepository.init();
-    }
 }
-
-
-
-let jobApplicationService: JobApplicationService;
-let menuApplicationService: MenuApplicationService;
-let menuSelectService: MenuSelectService;
-let initialService: InitialService;
-
-let menu: Menu = menuApplicationService.findMainMenu();
-let comp: MenuComponent;
-
-if(initialService.first()) {
-    initialService.init();
-}
-
-while(true) {
-    comp = menuSelectService.select(menu);
-    if(comp.name == 'exit') break;
-    jobApplicationService.runJob(comp);
-    menu = menuApplicationService.findNextMenu(comp);
-}
-
